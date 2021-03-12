@@ -1,0 +1,4 @@
+flask==1.0.2
+Flask-RESTful==0.3.6
+flask_restful_swagger==0.20.2
+flask_pymongo

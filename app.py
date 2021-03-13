@@ -3,7 +3,7 @@ from config import app
 from api import api
 from api.Login import Login
 from api.Authenticate import Authenticate
-from flask import url_for,redirect
+from flask import url_for,redirect, render_template
 from flask_dance.contrib.github import make_github_blueprint, github
 
 github_blueprint = make_github_blueprint(client_id='9557a35e2914f0b9d46d',
@@ -22,7 +22,11 @@ def github_login():
         account_info = github.get('/user')
         if account_info.ok:
             account_info_json = account_info.json()
-            return '<h1>Your Github name is {}'.format(account_info_json['login'])
+            with app.app_context():
+                rendered = render_template('blog.html', \
+                                           name =account_info_json['login'])
+                return rendered
+            # return '<h1>Your Github name is {}'.format(account_info_json['login'])
 
     return '<h1>Request failed!</h1>'
 

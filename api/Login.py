@@ -38,9 +38,10 @@ class Login(Resource):
             data = database.validateUser(username)
             if data:
                 print("data role..",data['roleid'])
-                role = database.getRole(data['roleid'])
-                token = jwt.encode({'user': username, 'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=30),'role':role['role']},app.config['SECRET_KEY'])
-                return make_response(token)
+                if data['password']==password:
+                     role = database.getRole(data['roleid'])
+                     token = jwt.encode({'user': username, 'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=30),'role':role['role']},app.config['SECRET_KEY'])
+                     return make_response(token)
 
             return make_response('could not verify!', 401)
 

@@ -30,21 +30,22 @@ class Login(Resource):
     )
     def post(self):
         try:
-            payload = json.loads(request.data)
+            payload = json.loads(request.data.decode())
             username = payload["username"]
             password = payload["password"]
 
-            # base64_bytes = base64.urlsafe_b64encode("".join(username).encode(encoding="utf-8"))
             data = database.validateUser(username)
             if data:
-                print("data role..",data['roleid'])
-                if data['password']==password:
-                     role = database.getRole(data['roleid'])
-                     token = jwt.encode({'user': username, 'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=30),'role':role['role']},app.config['SECRET_KEY'])
-                     return make_response(token)
+                print("data role..", data['roleid'])
+                if data['password'] == password:
+                    role = database.getRole(data['roleid'])
+                    token = jwt.encode({'user': username, 'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=30), 'role':role['role']},app.config['SECRET_KEY'])
+                    # return jsonify({'token':jwt.decode(token,app.config['SECRET_KEY'],algorithms="HS256")})
+                    return jsonify({'token':token})
 
-            return make_response('could not verify!', 401)
+
+            return make_response('could not verify!', 401, {'WWW-Authenticate': 'Basic realm="Login Required" '})
 
 
         except Exception as e:
-            print(e)
+            return  make_response('error: ',e)

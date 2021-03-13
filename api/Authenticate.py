@@ -1,30 +1,31 @@
 from flask_restful import Resource
 from flask import make_response,request,json
 from flask_restful_swagger import swagger
+from validate_token import token_required
 
 @swagger.model
 class Authenticate(Resource):
     @swagger.operation(
-        description="user authentication",
-        nickname="user authentication",
+        description="token authentication",
+        nickname="token authentication",
         parameters=[
             {
-                "name": "body",
-                "dataType": "string",
-
+                "name": "X_ACCESS_TOKEN",
+                "dataType": "String",
+                "description": "Access Token for API request authentication and validation",
                 "required": True,
                 "allowMultiple": False,
-                "paramType": "body"
+                "paramType": "header"
             }
         ],
         responseMessages=[
-            {"code": 200, "message": "User Authenticate succesfully"},
-            {"code": 400, "message": "Bad Request: Error on authenticating user"}
+            {"code": 200, "message": "Token Authenticate succesfully"},
+            {"code": 400, "message": "Bad Request: Error on authenticating token"}
         ],
     )
-    def post(self):
+    @token_required
+    def get(self):
         try:
-            pass
-
+            return make_response("token validates successfully")
         except Exception as e:
             print(e)

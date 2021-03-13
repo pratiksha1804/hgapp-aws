@@ -6,8 +6,8 @@ from api.Authenticate import Authenticate
 from flask import url_for,redirect, render_template
 from flask_dance.contrib.github import make_github_blueprint, github
 
-github_blueprint = make_github_blueprint(client_id='9557a35e2914f0b9d46d',
-                                         client_secret='083335de8ec8366ba060119baba8870e1e5e1d80')
+github_blueprint = make_github_blueprint(client_id='a5355a72806cec35befa',
+                                         client_secret='ae0d6b12844ebd5780d056f0f8bc1550b9bf1e7d')
 
 app.register_blueprint(github_blueprint, url_prefix='/login')
 

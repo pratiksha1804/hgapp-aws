@@ -30,7 +30,7 @@ class Login(Resource):
     )
     def post(self):
         try:
-            payload = json.loads(request.data.decode())
+            payload = json.loads(request.data)
             username = payload["username"]
             password = payload["password"]
 

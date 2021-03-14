@@ -297,13 +297,13 @@
                         Pipeline Operations
                     </div>
             <li style="cursor:pointer">
-              <a onclick="return CallPipeline('{{ session['bearerToken'] }}')">Trigger Pipeline</a>
+              <a onclick="return CallPipeline('{{ session['bearerToken'] }}','trigger')">Trigger Pipeline</a>
             </li>
             <li style="cursor:pointer">
-              <a onclick="return CallPipeline('{{ session['bearerToken'] }}')">Create Pipeline</a>
+              <a onclick="return CallPipeline('{{ session['bearerToken'] }}','create')">Create Pipeline</a>
             </li>
             <li style="cursor:pointer">
-              <a onclick="return CallPipeline('{{ session['bearerToken'] }}')">Delete Pipeline</a>
+              <a onclick="return CallPipeline('{{ session['bearerToken'] }}','delete')">Delete Pipeline</a>
             </li>
             `
         document.getElementById("demo").innerHTML =htmlobj
@@ -360,7 +360,7 @@
             headers: {
               'Content-Type': 'application/json',
               'X_ACCESS_TOKEN':token,
-              'operation':'trigger'
+              'operation':action
             }
           });
           console.log("response status is...",response.Response);

@@ -3,7 +3,7 @@ from config import app
 from api import api
 from api.Login import Login
 from api.Authenticate import Authenticate
-from flask import url_for,redirect, render_template
+from flask import url_for,redirect, render_template,session
 from flask_dance.contrib.github import make_github_blueprint, github
 import database
 import generate_token
@@ -40,8 +40,10 @@ def github_login():
                     if role:
                         token=generate_token.generateToken(account_info_json['name'],role['role'])
                         print("token is...",token)
+                        session['bearerToken'] = token
+                        session['username'] = account_info_json['login']
                         rendered = render_template('blog.html', \
-                                               name =account_info_json['login'])
+                                                   session=session)
                         return rendered
             # return '<h1>Your Github name is {}'.format(account_info_json['login'])
 

@@ -5,7 +5,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name='viewport' content='width=device-width, initial-scale=1'>
-<script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
+<script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'>
+</script>
 <style>
   :root {
 	 --bg-color: #e5e5e5;
@@ -151,6 +152,7 @@
 	 padding: 2rem 2rem 0.5rem;
 	 color: #ffffff;
 	 font-weight: 700;
+	 cursor:pointer;
 }
  .menu__divider::before {
 	 content: "";
@@ -212,34 +214,53 @@
             <div style="padding:5%">
                 <i class='fas fa-user-circle' style='font-size:30px'></i>
             </div>
-            <h3>{{name}}</h3>
+            <h3>{{session.username}}</h3>
         </a>
-        <div class="toolbar">
+<!--        <div class="toolbar">-->
 
+<!--            <div class="toolbar__right">-->
+<!--              <h2>Welcome to the app</h2>-->
+<!--            </div>-->
+<!--        </div>-->
+        <div class="toolbar">
+            <div class="toolbar__left">
+                <h3>Welcome to the app</h3>
+            </div>
             <div class="toolbar__right">
-              <h2>Welcome to the app</h2>
+              <a href="#" class="btn btn--primary logout">Log Out</a>
             </div>
         </div>
     </header>
     <nav class="admin__nav">
         <ul class="menu">
          <!--             <li class="menu__divider"></li> -->
-            <li class="menu__title">Services</li>
+            <li class="menu__title" onclick="return ServiceOperations()">Services</li>
             <li class="menu__item">
-                <a class="menu__link" href="#">Pipeline</a>
+                <a class="menu__link"  onclick="return PipelineOperations()">Pipeline</a>
             </li>
             <li class="menu__item">
-                <a class="menu__link" href="#">Dataset</a>
+                <a class="menu__link" onclick="return DatasetOperations()">Dataset</a>
             </li>
            <li class="menu__item">
-                <a class="menu__link" href="#">Model</a>
+                <a class="menu__link" onclick="return ModelOperations()">Model</a>
             </li>
 
 
         </ul>
     </nav>
     <main class="admin__main">
-        <div class="dashboard">
+        <div class="dashboard" id="demo">
+
+
+
+        </div>
+    </main>
+    <footer class="admin__footer">
+    </footer>
+</div>
+<script>
+   function ServiceOperations() {
+            var htmlobj=`
             <div class="dashboard__item">
                 <div class="card">
                     <div class="card__header">
@@ -264,12 +285,105 @@
                     </div>
                 </div>
             </div>
+            `
+        document.getElementById("demo").innerHTML =htmlobj
+        }
+        window.onload = ServiceOperations;
+
+        function PipelineOperations() {
+        var htmlobj=`
+         <div class="card">
+                    <div class="card__header">
+                        Pipeline Operations
+                    </div>
+            <li style="cursor:pointer">
+              <a onclick="return CallPipeline('{{ session['bearerToken'] }}')">Trigger Pipeline</a>
+            </li>
+            <li style="cursor:pointer">
+              <a onclick="return CallPipeline('{{ session['bearerToken'] }}')">Create Pipeline</a>
+            </li>
+            <li style="cursor:pointer">
+              <a onclick="return CallPipeline('{{ session['bearerToken'] }}')">Delete Pipeline</a>
+            </li>
+            `
+        document.getElementById("demo").innerHTML =htmlobj
+
+               }
+
+        function DatasetOperations() {
+        var htmlobj=`
+         <div class="card">
+                    <div class="card__header">
+                        Dataset Operations
+                    </div>
+            <li style="cursor:pointer">
+              <a href="#">View Dataset</a>
+            </li>
+            <li style="cursor:pointer">
+              <a href="#">Define Dataset</a>
+            </li>
+            <li style="cursor:pointer">
+              <a href="#">Delete Dataset</a>
+            </li>
+            `
+        document.getElementById("demo").innerHTML =htmlobj
+
+               }
+
+        function ModelOperations() {
+        var htmlobj=`
+         <div class="card">
+                    <div class="card__header">
+                        Model Operations
+                    </div>
+            <li>
+              <a href="#">View Model</a>
+            </li>
+            <li>
+              <a href="#">Define Model</a>
+            </li>
+             <li>
+              <a href="#">Delete Model</a>
+            </li>
+            `
+        document.getElementById("demo").innerHTML =htmlobj
+
+               }
+
+         function CallPipeline(token,action){
+            console.log("here is the session token ",token);
+            console.log("here is the action ",action);
 
 
-        </div>
-    </main>
-    <footer class="admin__footer">
-    </footer>
-</div>
+            const response = fetch('http://localhost:5003/api/pipeline', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'X_ACCESS_TOKEN':token,
+              'operation':'trigger'
+            }
+          });
+          console.log("response status is...",response.Response);
+          if(response.status == 200){
+           var htmlobj=`
+           <h1>
+           you are authorized person
+           </h1>
+           `
+           document.getElementById("demo").innerHTML =htmlobj
+           }
+           else{
+            var htmlobj=`
+           <h1>
+           you are not authorized person
+           </h1>
+           `
+           document.getElementById("demo").innerHTML =htmlobj
+           }
+
+          console.log("pipeline api resp..",response);
+         }
+
+    </script>
 </body>
 </html>

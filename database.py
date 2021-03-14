@@ -14,4 +14,8 @@ def getRole(roleid):
     return None
 
 def createUser(user):
-    return mongo.db.USERS.insert_one(user)
+    user1 = validateUser(user['username'])
+    if user1:
+        return user1
+    else:
+        return mongo.db.USERS.insert_one(user)

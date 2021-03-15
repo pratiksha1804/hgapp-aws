@@ -3,10 +3,13 @@ from config import app
 from api import api
 from api.Login import Login
 from api.Authenticate import Authenticate
-from flask import url_for,redirect, render_template,session
+from flask import url_for,redirect, render_template,session, request ,make_response, jsonify
 from flask_dance.contrib.github import make_github_blueprint, github
 import database
 import generate_token
+import jwt, json
+from http import HTTPStatus
+
 github_blueprint = make_github_blueprint(client_id='9557a35e2914f0b9d46d',
                                          client_secret='083335de8ec8366ba060119baba8870e1e5e1d80')
 
@@ -49,8 +52,42 @@ def github_login():
 
     return '<h1>Request failed!</h1>'
 
+@app.route('/authorize')
+def authorize():
+        try:
+            action = request.headers['operation']
+            print("action.....",action)
+            token = request.headers['X_ACCESS_TOKEN']
+            print("token.....",token)
 
+            decoded_token = jwt.decode(token, app.config['SECRET_KEY'], algorithms="HS256")
+            data = database.validatePermission(action,decoded_token['role'])
+            if data:
+                return make_response(jsonify(
+                    {
+                        "title": "You are authorized person",
+                        "status": HTTPStatus.OK,
+                    }
+                ),
+                    HTTPStatus.OK
+                )
+            return make_response(jsonify(
+                {
+                    "title": "You are not authorized person",
+                    "status": HTTPStatus.UNAUTHORIZED,
+                }
+            ),
+                HTTPStatus.UNAUTHORIZED
+            )
 
-
+        except Exception as e:
+            return make_response(jsonify(
+                {
+                    "title": "Error occcured",
+                    "status": HTTPStatus.BAD_REQUEST,
+                }
+            ),
+                HTTPStatus.BAD_REQUEST
+            )
 if __name__ == "__main__":
      app.run(host='0.0.0.0',port=5002, debug=True)

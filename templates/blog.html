@@ -227,7 +227,7 @@
                 <h3>Welcome to the app</h3>
             </div>
             <div class="toolbar__right">
-              <a href="#" class="btn btn--primary logout">Log Out</a>
+              <a  class="btn btn--primary logout">Log Out</a>
             </div>
         </div>
     </header>
@@ -259,6 +259,7 @@
     </footer>
 </div>
 <script>
+
    function ServiceOperations() {
             var htmlobj=`
             <div class="dashboard__item">
@@ -297,7 +298,7 @@
                         Pipeline Operations
                     </div>
             <li style="cursor:pointer">
-              <a onclick="return CallPipeline('{{ session['bearerToken'] }}','trigger')">Trigger Pipeline</a>
+              <a onclick="return CallPipeline('{{ session['bearerToken'] }}','define')">Trigger Pipeline</a>
             </li>
             <li style="cursor:pointer">
               <a onclick="return CallPipeline('{{ session['bearerToken'] }}','create')">Create Pipeline</a>
@@ -317,13 +318,13 @@
                         Dataset Operations
                     </div>
             <li style="cursor:pointer">
-              <a href="#">View Dataset</a>
+              <a onclick="return CallDataset('{{ session['bearerToken'] }}','view datasets')">View Dataset</a>
             </li>
             <li style="cursor:pointer">
-              <a href="#">Define Dataset</a>
+              <a onclick="return CallDataset('{{ session['bearerToken'] }}','define')">Define Dataset</a>
             </li>
             <li style="cursor:pointer">
-              <a href="#">Delete Dataset</a>
+              <a onclick="return CallDataset('{{ session['bearerToken'] }}','trigger')">Trigger Pipeline</a>
             </li>
             `
         document.getElementById("demo").innerHTML =htmlobj
@@ -336,14 +337,14 @@
                     <div class="card__header">
                         Model Operations
                     </div>
-            <li>
-              <a href="#">View Model</a>
+            <li style="cursor:pointer">
+               <a onclick="return CallModel('{{ session['bearerToken'] }}','view models')">View Model</a>
             </li>
-            <li>
-              <a href="#">Define Model</a>
+            <li style="cursor:pointer">
+              <a onclick="return CallModel('{{ session['bearerToken'] }}','define')">Define Model</a>
             </li>
-             <li>
-              <a href="#">Delete Model</a>
+             <li style="cursor:pointer">
+               <a onclick="return CallModel('{{ session['bearerToken'] }}','delete')">Delete Model</a>
             </li>
             `
         document.getElementById("demo").innerHTML =htmlobj
@@ -382,11 +383,79 @@
            `
            document.getElementById("demo").innerHTML =htmlobj
            }
-
   })
+ }
+
+ function CallDataset(token,action){
+            console.log("here is the session token ",token);
+            console.log("here is the action ",action);
 
 
-         }
+            const response = fetch('http://localhost:5004/api/dataset', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'X_ACCESS_TOKEN':token,
+              'operation':action
+            }
+          }).then(response => response.json())
+          .then(response => {
+            console.log("response title is...",response['title']);
+
+            if(response['status'] == 200){
+           var htmlobj=`
+           <h1>
+           you are authorized person
+           </h1>
+           `
+           document.getElementById("demo").innerHTML =htmlobj
+           }
+           else{
+            var htmlobj=`
+           <h1>
+           you are not authorized person
+           </h1>
+           `
+           document.getElementById("demo").innerHTML =htmlobj
+           }
+           })
+}
+
+function CallModel(token,action){
+            console.log("here is the session token ",token);
+            console.log("here is the action ",action);
+
+
+            const response = fetch('http://localhost:5005/api/model', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'X_ACCESS_TOKEN':token,
+              'operation':action
+            }
+          }).then(response => response.json())
+          .then(response => {
+            console.log("response title is...",response['title']);
+
+            if(response['status'] == 200){
+           var htmlobj=`
+           <h1>
+           you are authorized person to perform operations
+           </h1>
+           `
+           document.getElementById("demo").innerHTML =htmlobj
+           }
+           else{
+            var htmlobj=`
+           <h1>
+           you are not authorized person to perform operations
+           </h1>
+           `
+           document.getElementById("demo").innerHTML =htmlobj
+           }
+           })
+}
+
 
     </script>
 </body>

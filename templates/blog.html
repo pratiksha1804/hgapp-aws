@@ -292,69 +292,110 @@
         window.onload = ServiceOperations;
 
         function PipelineOperations() {
-        var htmlobj=`
-         <div class="card">
-                    <div class="card__header">
-                        Pipeline Operations
+        var htmlobj1=`
+        <div class="dashboard__item">
+                <div class="card">
+                    <li class="card__header" onclick="return CallPipeline('{{ session['bearerToken'] }}','define')">
+                        Trigger Pipeline
+                        <div class="card__item" id="define"></div>
+                    </li>
+                     <li class="card__header" onclick="return CallPipeline('{{ session['bearerToken'] }}','create')">
+                        create Pipeline
+                        <div class="card__item" id="create"></div>
+                    </li>
+                     <li class="card__header" onclick="return CallPipeline('{{ session['bearerToken'] }}','delete')">
+                        Delete Pipeline
+                        <div class="card__item" id="delete"></div>
+                    </li>
+                    <div class="card__content">
+                    <div class="card__item" id="result">
+                        </div>
+
                     </div>
-            <li style="cursor:pointer">
-              <a onclick="return CallPipeline('{{ session['bearerToken'] }}','define')">Trigger Pipeline</a>
-            </li>
-            <li style="cursor:pointer">
-              <a onclick="return CallPipeline('{{ session['bearerToken'] }}','create')">Create Pipeline</a>
-            </li>
-            <li style="cursor:pointer">
-              <a onclick="return CallPipeline('{{ session['bearerToken'] }}','delete')">Delete Pipeline</a>
-            </li>
-            `
-        document.getElementById("demo").innerHTML =htmlobj
+                </div>
+                </div>
+                `
+
+
+<!--        var htmlobj=`-->
+<!--         <div class="card">-->
+<!--                    <div class="card__header">-->
+<!--                        Pipeline Operations-->
+<!--                    </div>-->
+<!--            <li style="cursor:pointer">-->
+<!--              <a onclick="return CallPipeline('{{ session['bearerToken'] }}','trigger')">Trigger Pipeline</a>-->
+<!--            </li>-->
+<!--            <li style="cursor:pointer">-->
+<!--              <a onclick="return CallPipeline('{{ session['bearerToken'] }}','create')">Create Pipeline</a>-->
+<!--            </li>-->
+<!--            <li style="cursor:pointer">-->
+<!--              <a onclick="return CallPipeline('{{ session['bearerToken'] }}','delete')">Delete Pipeline</a>-->
+<!--            </li>-->
+<!--            `-->
+
+        document.getElementById("demo").innerHTML =htmlobj1
 
                }
 
         function DatasetOperations() {
-        var htmlobj=`
-         <div class="card">
-                    <div class="card__header">
-                        Dataset Operations
+        var htmlobj1=`
+        <div class="dashboard__item">
+                <div class="card">
+                    <li class="card__header" onclick="return CallDataset('{{ session['bearerToken'] }}','view datasets')">
+                        View Datasets
+                        <div class="card__item" id="view"></div>
+                    </li>
+                     <li class="card__header" onclick="return CallDataset('{{ session['bearerToken'] }}','define')">
+                        create Dataset
+                        <div class="card__item" id="define"></div>
+                    </li>
+                     <li class="card__header" onclick="return CallDataset('{{ session['bearerToken'] }}','delete')">
+                        Delete Dataset
+                        <div class="card__item" id="delete"></div>
+                    </li>
+                    <div class="card__content">
+                    <div class="card__item" id="result">
+                        </div>
+
                     </div>
-            <li style="cursor:pointer">
-              <a onclick="return CallDataset('{{ session['bearerToken'] }}','view datasets')">View Dataset</a>
-            </li>
-            <li style="cursor:pointer">
-              <a onclick="return CallDataset('{{ session['bearerToken'] }}','define')">Define Dataset</a>
-            </li>
-            <li style="cursor:pointer">
-              <a onclick="return CallDataset('{{ session['bearerToken'] }}','trigger')">Trigger Pipeline</a>
-            </li>
-            `
-        document.getElementById("demo").innerHTML =htmlobj
+                </div>
+                </div>
+                `
+             document.getElementById("demo").innerHTML =htmlobj1
 
                }
 
         function ModelOperations() {
-        var htmlobj=`
-         <div class="card">
-                    <div class="card__header">
-                        Model Operations
+       var htmlobj1=`
+        <div class="dashboard__item">
+                <div class="card">
+                    <li class="card__header" onclick="return CallModel('{{ session['bearerToken'] }}','view models')">
+                        View Models
+                        <div class="card__item" id="view"></div>
+                    </li>
+                     <li class="card__header" onclick="return CallModel('{{ session['bearerToken'] }}','define')">
+                        create Model
+                        <div class="card__item" id="define"></div>
+                    </li>
+                     <li class="card__header" onclick="return CallModel('{{ session['bearerToken'] }}','delete')">
+                        Delete Model
+                        <div class="card__item" id="delete"></div>
+                    </li>
+                    <div class="card__content">
+                    <div class="card__item" id="result">
+                        </div>
+
                     </div>
-            <li style="cursor:pointer">
-               <a onclick="return CallModel('{{ session['bearerToken'] }}','view models')">View Model</a>
-            </li>
-            <li style="cursor:pointer">
-              <a onclick="return CallModel('{{ session['bearerToken'] }}','define')">Define Model</a>
-            </li>
-             <li style="cursor:pointer">
-               <a onclick="return CallModel('{{ session['bearerToken'] }}','delete')">Delete Model</a>
-            </li>
-            `
-        document.getElementById("demo").innerHTML =htmlobj
+                </div>
+                </div>
+                `
+            document.getElementById("demo").innerHTML =htmlobj1
 
                }
 
          function CallPipeline(token,action){
             console.log("here is the session token ",token);
             console.log("here is the action ",action);
-
 
             const response = fetch('http://localhost:5003/api/pipeline', {
             method: 'POST',
@@ -369,19 +410,23 @@
 
             if(response['status'] == 200){
            var htmlobj=`
-           <h1>
+           <label>
            you are authorized person
-           </h1>
+           </label>
            `
-           document.getElementById("demo").innerHTML =htmlobj
+           if(action==="view results")
+           action="view"
+           document.getElementById(action).innerHTML =htmlobj
            }
            else{
             var htmlobj=`
-           <h1>
+           <label>
            you are not authorized person
-           </h1>
+           </label>
            `
-           document.getElementById("demo").innerHTML =htmlobj
+           if(action==="view results")
+           action="view"
+           document.getElementById(action).innerHTML =htmlobj
            }
   })
  }
@@ -389,8 +434,6 @@
  function CallDataset(token,action){
             console.log("here is the session token ",token);
             console.log("here is the action ",action);
-
-
             const response = fetch('http://localhost:5004/api/dataset', {
             method: 'POST',
             headers: {
@@ -404,28 +447,30 @@
 
             if(response['status'] == 200){
            var htmlobj=`
-           <h1>
+           <label>
            you are authorized person
-           </h1>
+           </label>
            `
-           document.getElementById("demo").innerHTML =htmlobj
+           if(action==="view datasets")
+           action="view"
+           document.getElementById(action).innerHTML =htmlobj
            }
            else{
             var htmlobj=`
-           <h1>
+           <label>
            you are not authorized person
-           </h1>
+           </label>
            `
-           document.getElementById("demo").innerHTML =htmlobj
+           if(action==="view datasets")
+           action="view"
+           document.getElementById(action).innerHTML =htmlobj
            }
            })
 }
 
 function CallModel(token,action){
-            console.log("here is the session token ",token);
+              console.log("here is the session token ",token);
             console.log("here is the action ",action);
-
-
             const response = fetch('http://localhost:5005/api/model', {
             method: 'POST',
             headers: {
@@ -439,19 +484,23 @@ function CallModel(token,action){
 
             if(response['status'] == 200){
            var htmlobj=`
-           <h1>
-           you are authorized person to perform operations
-           </h1>
+           <label>
+           you are authorized person
+           </label>
            `
-           document.getElementById("demo").innerHTML =htmlobj
+           if(action==="view models")
+           action="view"
+           document.getElementById(action).innerHTML =htmlobj
            }
            else{
             var htmlobj=`
-           <h1>
-           you are not authorized person to perform operations
-           </h1>
+           <label>
+           you are not authorized person
+           </label>
            `
-           document.getElementById("demo").innerHTML =htmlobj
+           if(action==="view models")
+           action="view"
+           document.getElementById(action).innerHTML =htmlobj
            }
            })
 }

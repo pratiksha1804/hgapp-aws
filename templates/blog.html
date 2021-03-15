@@ -362,9 +362,11 @@
               'X_ACCESS_TOKEN':token,
               'operation':action
             }
-          });
-          console.log("response status is...",response.Response);
-          if(response.status == 200){
+          }).then(response => response.json())
+          .then(response => {
+            console.log("response title is...",response['title']);
+
+            if(response['status'] == 200){
            var htmlobj=`
            <h1>
            you are authorized person
@@ -381,7 +383,9 @@
            document.getElementById("demo").innerHTML =htmlobj
            }
 
-          console.log("pipeline api resp..",response);
+  })
+
+
          }
 
     </script>

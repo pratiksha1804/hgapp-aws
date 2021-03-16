@@ -295,7 +295,7 @@
         var htmlobj1=`
         <div class="dashboard__item">
                 <div class="card">
-                    <li class="card__header" onclick="return CallPipeline('{{ session['bearerToken'] }}','define')">
+                    <li class="card__header" onclick="return CallPipeline('{{ session['bearerToken'] }}','trigger')">
                         Trigger Pipeline
                         <div class="card__item" id="define"></div>
                     </li>
@@ -434,6 +434,8 @@
  function CallDataset(token,action){
             console.log("here is the session token ",token);
             console.log("here is the action ",action);
+
+
             const response = fetch('http://localhost:5004/api/dataset', {
             method: 'POST',
             headers: {
@@ -469,8 +471,10 @@
 }
 
 function CallModel(token,action){
-              console.log("here is the session token ",token);
+                     console.log("here is the session token ",token);
             console.log("here is the action ",action);
+
+
             const response = fetch('http://localhost:5005/api/model', {
             method: 'POST',
             headers: {
